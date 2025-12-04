@@ -22,7 +22,6 @@ export abstract class ImageQuizService {
   private static readonly tileCount = 128;
   private static readonly revealInterval = 0.23;
 
-  // mengambil data input, upload file, konversinya menjadi struktur akhir (IImageQuizJson), simpan ke db
   static async createImageQuiz(data: ICreateImageQuiz, user_id: string) {
     await this.existGameCheck(data.name);
 
@@ -60,10 +59,6 @@ export abstract class ImageQuizService {
     }
 
     const gameJson: IImageQuizJson = {
-      //   base_score: data.base_score,
-      //   timeLimit_seconds: data.timeLimit,
-      //   tileCount: data.tileCount,
-      //   revealInterval: data.revealInterval,
       is_question_randomized: data.is_question_randomized,
       is_answer_randomized: data.is_answer_randomized,
       questions: data.questions.map(
@@ -78,7 +73,6 @@ export abstract class ImageQuizService {
       ),
     };
 
-    // 5. Simpan ke Database
     const newGame = await prisma.games.create({
       data: {
         id: newGameId,
@@ -120,11 +114,9 @@ export abstract class ImageQuizService {
       },
     });
 
-    // 1. Cek apakah game ada dan slug-nya benar
     if (!game || game.game_template.slug !== this.imageQuizSlug)
       throw new ErrorResponse(StatusCodes.NOT_FOUND, 'Game not found');
 
-    // 2. Cek Hak Akses: Hanya Pembuat atau Super Admin yang boleh lihat
     if (user_role !== 'SUPER_ADMIN' && game.creator_id !== user_id)
       throw new ErrorResponse(
         StatusCodes.FORBIDDEN,
@@ -195,19 +187,6 @@ export abstract class ImageQuizService {
         : q.answers,
     }));
 
-    // const safeQuestions = gameJson.questions.map(q => {
-    //   // Destructure untuk membuang correct_answer_id
-    //   const { correct_answer_id: _correctAnswerId, ...rest } = q;
-
-    //   return {
-    //     ...rest,
-    //     // Cek flag is_answer_randomized
-    //     answers: gameJson.is_answer_randomized
-    //       ? this.shuffleArray(rest.answers)
-    //       : rest.answers,
-    //   };
-    // });
-
     const finalQuestions = gameJson.is_question_randomized
       ? this.shuffleArray(safeQuestions)
       : safeQuestions;
@@ -222,13 +201,11 @@ export abstract class ImageQuizService {
     };
   }
 
-  // delete game
   static async deleteImageQuiz(
     game_id: string,
     user_id: string,
     user_role: ROLE,
   ) {
-    // 1. Cari game untuk validasi hak akses dan mendapatkan path file yang perlu dihapus
     const game = await prisma.games.findUnique({
       where: { id: game_id },
       select: {
@@ -243,14 +220,12 @@ export abstract class ImageQuizService {
     if (!game || game.game_template.slug !== this.imageQuizSlug)
       throw new ErrorResponse(StatusCodes.NOT_FOUND, 'Game not found');
 
-    // 2. Validasi Hak Akses (Hanya pembuat atau Super Admin yang boleh hapus)
     if (user_role !== 'SUPER_ADMIN' && game.creator_id !== user_id)
       throw new ErrorResponse(
         StatusCodes.FORBIDDEN,
         'User cannot delete this game',
       );
 
-    // 3. Kumpulkan Path File untuk Dihapus
     const gameJson = game.game_json as unknown as IImageQuizJson;
     const oldImagePaths: string[] = [];
 
@@ -262,12 +237,10 @@ export abstract class ImageQuizService {
       }
     }
 
-    // 4. Hapus Data dari Database
     await prisma.games.delete({ where: { id: game_id } });
 
-    // 5. Hapus File Fisik dari Server (FileManager)
     for (const path of oldImagePaths) {
-      await FileManager.remove(path); // Asumsi FileManager.remove tersedia di utilitas proyek
+      await FileManager.remove(path);
     }
 
     return { id: game_id };
@@ -305,7 +278,6 @@ export abstract class ImageQuizService {
     const oldQuizJson = game.game_json as IImageQuizJson | null;
     const oldImagePaths: string[] = [];
 
-    // 2. Kumpulkan semua path gambar lama (Thumbnail + Questions)
     if (game.thumbnail_image) oldImagePaths.push(game.thumbnail_image);
 
     if (oldQuizJson?.questions) {
@@ -315,7 +287,6 @@ export abstract class ImageQuizService {
       }
     }
 
-    // 3. Handle Upload File Baru (Thumbnail & Soal)
     let thumbnailImagePath = game.thumbnail_image;
 
     if (data.thumbnail_image) {
@@ -337,26 +308,18 @@ export abstract class ImageQuizService {
       }
     }
 
-    // 4. Konstruksi JSON Baru (Mempertahankan data lama yang tidak di-update)
     const questionsToUpdate = data.questions ?? oldQuizJson?.questions ?? [];
 
     const newQuestions = questionsToUpdate.map(question => {
       let questionImageUrl: string | null = null;
 
-      // Cek apakah user mengirim index file baru (number) atau path file lama (string)
       if (question && 'question_image_array_index' in question) {
-        // 1. Cek apakah user mengirim index file baru (number)
         if (typeof question.question_image_array_index === 'number') {
-          questionImageUrl = imageArray[question.question_image_array_index]; // File baru
+          questionImageUrl = imageArray[question.question_image_array_index];
+        } else if (typeof question.question_image_array_index === 'string') {
+          questionImageUrl = question.question_image_array_index;
         }
-        // 2. Cek apakah user mengirim path file lama (string)
-        else if (typeof question.question_image_array_index === 'string') {
-          questionImageUrl = question.question_image_array_index; // Path lama
-        }
-      }
-
-      // 3. Jika tidak ada index/path, cari path lama dari JSON lama
-      else {
+      } else {
         const oldQuestion = oldQuizJson?.questions.find(
           q => q.question_id === question.question_id,
         );
@@ -370,20 +333,15 @@ export abstract class ImageQuizService {
     });
 
     const quizJson: IImageQuizJson = {
-      // Gabungkan flags randomization dengan flags lama
       is_question_randomized:
         data.is_question_randomized ??
         oldQuizJson?.is_question_randomized ??
         false,
       is_answer_randomized:
         data.is_answer_randomized ?? oldQuizJson?.is_answer_randomized ?? false,
-
-      // [BASE SCORE DIHAPUS, TIDAK PERLU DISALIN LAGI]
-
       questions: newQuestions as IImageQuizQuestion[],
     };
 
-    // 5. Update Database
     const updatedGame = await prisma.games.update({
       where: { id: game_id },
       data: {
@@ -396,8 +354,6 @@ export abstract class ImageQuizService {
       select: { id: true },
     });
 
-    // 6. Hapus File Lama yang Tidak Digunakan Lagi
-    // (Logic ini menyalin QuizService untuk menghindari sampah file di server)
     const newImagePaths: string[] = [thumbnailImagePath];
 
     if (quizJson.questions) {
@@ -416,7 +372,6 @@ export abstract class ImageQuizService {
     return updatedGame;
   }
 
-  // memvalidasi jawaban, menghitung skor, mengembalikan hasil
   static async checkAnswer(data: ICheckAnswer, game_id: string) {
     const game = await prisma.games.findUnique({
       where: { id: game_id },
@@ -428,18 +383,15 @@ export abstract class ImageQuizService {
 
     const gameJson = game.game_json as unknown as IImageQuizJson;
 
-    // Variabel untuk menampung hasil total
     let totalScore = 0;
     let correctCount = 0;
     const results = [];
 
-    // LOOPING: Cek setiap jawaban yang dikirim frontend
     for (const userAnswer of data.answers) {
       const question = gameJson.questions.find(
         q => q.question_id === userAnswer.question_id,
       );
 
-      // Jika pertanyaan tidak ditemukan (misal ID salah), kita skip atau tandai salah
       if (!question) {
         results.push({
           question_id: userAnswer.question_id,
@@ -458,7 +410,7 @@ export abstract class ImageQuizService {
         correctCount++;
         const timeSpentSeconds = userAnswer.time_spent_ms / 1000;
 
-        // LOGIKA BONUS KECEPATAN (Sama seperti sebelumnya)
+        // LOGIKA BONUS KECEPATAN
         if (timeSpentSeconds >= this.timeLimit) {
           scoreGained = 1;
         } else if (timeSpentSeconds >= 20) {
@@ -470,24 +422,23 @@ export abstract class ImageQuizService {
         }
       }
 
-      // Akumulasi Total Skor
       totalScore += scoreGained;
 
       results.push({
         question_id: userAnswer.question_id,
         is_correct: isCorrect,
         score: scoreGained,
-        correct_answer_id: question.correct_answer_id, // Opsional: Beri kunci jawaban
       });
     }
 
-    // Kembalikan hasil rekapitulasi
+    await this.updatePlayCount(game_id);
+
     return {
       total_questions: gameJson.questions.length,
       total_answered: data.answers.length,
       correct_count: correctCount,
       total_score: totalScore,
-      details: results, // Detail per soal
+      details: results,
     };
   }
 

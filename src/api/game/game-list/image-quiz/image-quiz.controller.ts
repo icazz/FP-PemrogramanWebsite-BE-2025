@@ -26,7 +26,7 @@ import {
 } from './schema/update-image-quiz.schema';
 
 export const ImageQuizController = Router()
-  // 1. CREATE GAME
+  // CREATE GAME
   .post(
     '/',
     validateAuth({}),
@@ -60,10 +60,10 @@ export const ImageQuizController = Router()
     },
   )
 
-  // 2. GET GAME DETAIL (Private - Admin/Creator Only)
+  // GET GAME DETAIL (Private - Admin/Creator Only)
   .get(
     '/:game_id',
-    validateAuth({}), // Wajib Login
+    validateAuth({}),
     async (
       request: AuthedRequest<{ game_id: string }>,
       response: Response,
@@ -91,7 +91,7 @@ export const ImageQuizController = Router()
   // 3. DELETE GAME
   .delete(
     '/:game_id',
-    validateAuth({}), // Wajib Login
+    validateAuth({}),
     async (
       request: AuthedRequest<{ game_id: string }>,
       response: Response,
@@ -148,17 +148,17 @@ export const ImageQuizController = Router()
   // PLAY PRIVATE
   .get(
     '/:game_id/play/private',
-    validateAuth({}), // Wajib Login untuk akses privat
+    validateAuth({}),
     async (
-      request: AuthedRequest<{ game_id: string }>, // Membutuhkan AuthedRequest
+      request: AuthedRequest<{ game_id: string }>,
       response: Response,
       next: NextFunction,
     ) => {
       try {
         const game = await ImageQuizService.getImageQuizPlay(
           request.params.game_id,
-          false, // is_public = false (Akses Private)
-          request.user!.user_id, // Kirim ID user untuk cek kepemilikan
+          false,
+          request.user!.user_id,
           request.user!.role,
         );
         const result = new SuccessResponse(
@@ -174,12 +174,12 @@ export const ImageQuizController = Router()
     },
   )
 
-  // Update Game
+  // UPDATE GAME
   .patch(
     '/:game_id',
     validateAuth({}),
     validateBody({
-      schema: UpdateImageQuizSchema, // Skema update yang sudah kita buat
+      schema: UpdateImageQuizSchema,
       file_fields: [
         { name: 'thumbnail_image', maxCount: 1 },
         { name: 'files_to_upload', maxCount: 20 },
@@ -210,7 +210,7 @@ export const ImageQuizController = Router()
     },
   )
 
-  // 5. CHECK ANSWER
+  // CHECK ANSWER
   .post(
     '/:game_id/check',
     validateBody({ schema: CheckAnswerSchema }),
@@ -228,30 +228,6 @@ export const ImageQuizController = Router()
           StatusCodes.OK,
           'Answer validated',
           result,
-        );
-
-        return response
-          .status(successResponse.statusCode)
-          .json(successResponse.json());
-      } catch (error) {
-        next(error);
-      }
-    },
-  )
-  // 6. UPDATE PLAY COUNT
-  .post(
-    '/:game_id/play-count',
-    async (
-      request: Request<{ game_id: string }>,
-      response: Response,
-      next: NextFunction,
-    ) => {
-      try {
-        await ImageQuizService.updatePlayCount(request.params.game_id);
-        const successResponse = new SuccessResponse(
-          StatusCodes.OK,
-          'Play count updated',
-          null,
         );
 
         return response

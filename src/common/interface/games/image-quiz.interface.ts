@@ -20,7 +20,7 @@ export interface IImageQuizJson {
   is_answer_randomized: boolean;
 }
 
-// konfigurasi mutlak yang dikirim ke frontend
+// konfigurasi yang dikirim ke frontend
 export interface IImageQuizConfig {
   time_limit_seconds: number;
   total_tiles: number;
