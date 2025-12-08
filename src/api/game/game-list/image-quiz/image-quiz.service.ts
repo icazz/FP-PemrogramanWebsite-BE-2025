@@ -411,14 +411,16 @@ export abstract class ImageQuizService {
         const timeSpentSeconds = userAnswer.time_spent_ms / 1000;
 
         // LOGIKA BONUS KECEPATAN
-        if (timeSpentSeconds >= this.timeLimit) {
-          scoreGained = 1;
-        } else if (timeSpentSeconds >= 20) {
-          scoreGained = 2;
-        } else if (timeSpentSeconds >= 10) {
-          scoreGained = 3;
-        } else if (timeSpentSeconds >= 0) {
-          scoreGained = 4;
+        if (timeSpentSeconds > this.timeLimit) {
+          scoreGained = 1; // > 30 detik (Time's up)
+        } else if (timeSpentSeconds > 20) {
+          scoreGained = 2; // 20.1 - 30 detik
+        } else if (timeSpentSeconds > 10) {
+          scoreGained = 3; // 10.1 - 20 detik
+        } else if (timeSpentSeconds > 5) {
+          scoreGained = 4; // 5.1 - 10 detik
+        } else {
+          scoreGained = 5; // 0 - 5 detik (Sangat Cepat)
         }
       }
 

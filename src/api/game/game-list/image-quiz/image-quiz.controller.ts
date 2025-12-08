@@ -88,7 +88,7 @@ export const ImageQuizController = Router()
     },
   )
 
-  // 3. DELETE GAME
+  // DELETE GAME
   .delete(
     '/:game_id',
     validateAuth({}),
@@ -119,7 +119,7 @@ export const ImageQuizController = Router()
     },
   )
 
-  // 4. PLAY PUBLIC
+  // PLAY PUBLIC
   .get(
     '/:game_id/play/public',
     async (
