@@ -45,12 +45,21 @@ export const validateBody = <T>({
       const filesData =
         file_fields.length > 0
           ? Object.fromEntries(
-              Object.entries(request.files || {}).map(([key, value]) => [
-                key,
-                Array.isArray(value) && value.length > 1
-                  ? value.map(item => multerToFile(item))
-                  : multerToFile(value[0]),
-              ]),
+              Object.entries(request.files || {}).map(([key, value]) => {
+                const fieldConfig = file_fields.find(
+                  field => field.name === key,
+                );
+                // If maxCount is 1, treat as single file. Otherwise, treat as array.
+                const isSingleFile = fieldConfig?.maxCount === 1;
+                const files = value as Express.Multer.File[];
+
+                return [
+                  key,
+                  isSingleFile
+                    ? multerToFile(files[0])
+                    : files.map(item => multerToFile(item)),
+                ];
+              }),
             )
           : {};
 
