@@ -5,6 +5,7 @@ import {
   Router,
 } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import { verify } from 'jsonwebtoken';
 
 import {
   type AuthedRequest,
@@ -215,15 +216,33 @@ export const ImageQuizController = Router()
     '/:game_id/check',
     validateBody({ schema: CheckAnswerSchema }),
     async (
-      request: Request<{ game_id: string }, {}, ICheckAnswer>,
+      request: AuthedRequest<{ game_id: string }, {}, ICheckAnswer>,
       response: Response,
       next: NextFunction,
     ) => {
       try {
+        let userId: string | undefined;
+
+        const authHeader = request.headers.authorization;
+
+        if (authHeader) {
+          try {
+            const token = authHeader.split(' ')[1];
+            const secret = process.env.JWT_ACCESS_SECRET || 'secret';
+            const decoded = verify(token, secret) as { user_id: string };
+
+            userId = decoded.user_id;
+          } catch {
+            userId = undefined;
+          }
+        }
+
         const result = await ImageQuizService.checkAnswer(
           request.body,
           request.params.game_id,
+          userId,
         );
+
         const successResponse = new SuccessResponse(
           StatusCodes.OK,
           'Answer validated',
