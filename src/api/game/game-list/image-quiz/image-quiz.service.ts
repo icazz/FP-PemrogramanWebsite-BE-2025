@@ -373,7 +373,11 @@ export abstract class ImageQuizService {
     return updatedGame;
   }
 
-  static async checkAnswer(data: ICheckAnswer, game_id: string) {
+  static async checkAnswer(
+    data: ICheckAnswer,
+    game_id: string,
+    user_id?: string,
+  ) {
     const game = await prisma.games.findUnique({
       where: { id: game_id },
       select: { game_json: true, game_template: { select: { slug: true } } },
@@ -411,17 +415,16 @@ export abstract class ImageQuizService {
         correctCount++;
         const timeSpentSeconds = userAnswer.time_spent_ms / 1000;
 
-        // LOGIKA BONUS KECEPATAN
-        if (timeSpentSeconds > this.timeLimit) {
-          scoreGained = 1; // > 30 detik (Time's up)
-        } else if (timeSpentSeconds > 20) {
-          scoreGained = 2; // 20.1 - 30 detik
-        } else if (timeSpentSeconds > 10) {
-          scoreGained = 3; // 10.1 - 20 detik
-        } else if (timeSpentSeconds > 5) {
-          scoreGained = 4; // 5.1 - 10 detik
+        if (timeSpentSeconds <= 5) {
+          scoreGained = 5;
+        } else if (timeSpentSeconds <= 10) {
+          scoreGained = 4;
+        } else if (timeSpentSeconds <= 20) {
+          scoreGained = 3;
+        } else if (timeSpentSeconds <= 30) {
+          scoreGained = 2;
         } else {
-          scoreGained = 5; // 0 - 5 detik (Sangat Cepat)
+          scoreGained = 1;
         }
       }
 
@@ -431,6 +434,13 @@ export abstract class ImageQuizService {
         question_id: userAnswer.question_id,
         is_correct: isCorrect,
         score: scoreGained,
+      });
+    }
+
+    if (user_id) {
+      await prisma.users.update({
+        where: { id: user_id },
+        data: { total_game_played: { increment: 1 } },
       });
     }
 
