@@ -32,7 +32,7 @@ export const UpdateImageQuizSchema = z
 
     files_to_upload: fileArraySchema({
       max_size: 5 * 1024 * 1024,
-      min_amount: 1,
+      min_amount: 0,
       max_amount: 20,
     }).optional(),
 
