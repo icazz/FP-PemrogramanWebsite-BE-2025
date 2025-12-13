@@ -1,7 +1,7 @@
 id,slug,name,description,logo,is_time_limit_based,is_life_based
 d7d8399a-8a98-44f3-a665-ed03a6b9a5d0,quiz,"Quiz","Create a multiple choice Game",atom,false,false
 8fcc856e-4366-4275-802f-2cda5e010183,anagram,"Anagram","Arrange the jumbled letters into the correct word",book-a,false,false
-0eabc2f1-0119-48f4-84e8-2e9a2375757c,spin-the-wheel,"Spin the Wheel","Lorem",disc-3,false,false
+0eabc2f1-0119-48f4-84e8-2e9a2375757c,spin-the-wheel,"Spin the Wheel","Game edukasi berbasis pilihan ganda dengan mekanisme roda putar",disc-3,false,false
 1c6f82ad-3f6f-4a98-8fb9-e52fcb1cce84,open-the-box,"Open the Box","Lorem",archive-restore,true,false
 80075968-6986-4980-a735-d76a287cf78d,unjumble,"Unjumble","Lorem",combine,false,false
 29d219ad-abc3-4cbc-8f60-d2b1d06efeff,matching-pair,"Matching Pair","Lorem",users,false,false
