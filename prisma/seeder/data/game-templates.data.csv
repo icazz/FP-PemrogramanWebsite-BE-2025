@@ -21,7 +21,7 @@ ac8b43c2-1bee-4a3f-a9ad-b8aa6f8a8d10,true-or-false,"True or False","Lorem",book-
 a947e0b8-f3f1-4c20-af14-63ac04c8ed8d,airplane,"Airplane","Lorem",plane,false,true
 9803ce6b-8d0c-47fe-8306-9411e3399665,whack-a-mole,"Whack-a-Mole","Lorem",gavel,true,false
 9d13d300-fe45-4fa3-88d3-4f944e1a7f01,baloon-pop,"Baloon Pop","Lorem",bow-arrow,true,false
-b7efa7d0-fe73-4a5b-80d8-953cee5a39dc,image-quiz,"Image Quiz","Lorem",aperture,true,false
+b7efa7d0-fe73-4a5b-80d8-953cee5a39dc,image-quiz,"Image Quiz","Create a time-based image reveal Game",aperture,true,false
 665a54ee-1920-4d00-a593-c79ee8b738fa,flip-tiles,"Flip Tiles","Lorem",copy-slash,false,false
 ec1fdf17-7935-4da9-a346-7bfd887fb56c,rank-order,"Rank Order","Lorem",list-collapse,false,false
 246e89e4-081e-4aae-b202-56c7a8c44e8f,win-or-lose-quiz,"Win or Lose Quiz","Lorem",spade,false,false
