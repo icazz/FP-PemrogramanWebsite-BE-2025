@@ -423,7 +423,7 @@ export abstract class ImageQuizService {
         } else if (timeSpentSeconds <= 30) {
           scoreGained = 2;
         } else {
-          scoreGained = 1;
+          scoreGained = 0;
         }
       }
 
