@@ -239,9 +239,7 @@ export abstract class ImageQuizService {
 
     await prisma.games.delete({ where: { id: game_id } });
 
-    for (const path of oldImagePaths) {
-      await FileManager.remove(path);
-    }
+    await Promise.all(oldImagePaths.map((path) => FileManager.remove(path)));
 
     return { id: game_id };
   }
