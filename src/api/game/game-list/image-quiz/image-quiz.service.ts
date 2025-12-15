@@ -182,7 +182,6 @@ export abstract class ImageQuizService {
       question_id: q.question_id,
       question_text: q.question_text,
       question_image_url: q.question_image_url,
-      correct_answer_id: q.correct_answer_id,
       answers: gameJson.is_answer_randomized
         ? this.shuffleArray(q.answers)
         : q.answers,
