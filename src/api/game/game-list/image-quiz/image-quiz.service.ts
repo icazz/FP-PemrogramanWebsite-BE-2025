@@ -361,11 +361,11 @@ export abstract class ImageQuizService {
       }
     }
 
-    for (const oldPath of oldImagePaths) {
-      if (!newImagePaths.includes(oldPath)) {
-        await FileManager.remove(oldPath);
-      }
-    }
+    await Promise.all(
+      oldImagePaths
+        .filter((oldPath) => !newImagePaths.includes(oldPath))
+        .map((oldPath) => FileManager.remove(oldPath))
+    );
 
     return updatedGame;
   }
