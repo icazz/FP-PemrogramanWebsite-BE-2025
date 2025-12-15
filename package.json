@@ -10,6 +10,7 @@
     "build:binary": "bun build --compile --target bun --outfile server ./src/main.ts",
     "db:dev": "dotenv -e .env.development -- bun migrate:dev && bun seed:dev",
     "db:prod": "dotenv -e .env.production -- bun migrate:dev && bun seed:dev",
+    "dev": "dotenv -e .env.development -- tsx watch src/main.ts",
     "docker:down:dev": "dotenv -e .env.development -- docker compose down",
     "docker:down:prod": "dotenv -e .env.production -- docker compose down",
     "docker:up:dev": "dotenv -e .env.development -- docker compose up -d",
@@ -70,7 +71,8 @@
     "lint-staged": "^16.2.6",
     "prettier": "^3.6.2",
     "prisma": "^6.19.0",
-    "sort-package-json": "^3.4.0"
+    "sort-package-json": "^3.4.0",
+    "tsx": "^4.21.0"
   },
   "peerDependencies": {
     "typescript": "^5.8.3"

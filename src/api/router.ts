@@ -1,15 +1,17 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable import/no-default-export */
 import { Router } from 'express';
 
 import { AuthController } from './auth/auth.controller';
 import { GameController } from './game/game.controller';
+import { router as openTheBoxRouter } from './game/game-list/open-the-box/router';
 import { UserController } from './user/user.controller';
 
-const AppRouter = Router();
+const appRouter = Router();
 
-AppRouter.use('/auth', AuthController);
-AppRouter.use('/user', UserController);
-AppRouter.use('/game', GameController);
+appRouter.use('/auth', AuthController);
+appRouter.use('/user', UserController);
 
-export default AppRouter;
+appRouter.use('/game/game-list/open-the-box', openTheBoxRouter);
+
+appRouter.use('/game', GameController);
+
+export { appRouter };

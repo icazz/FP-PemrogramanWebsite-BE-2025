@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import { StatusCodes } from 'http-status-codes';
 
-import AppRouter from './api/router';
+import { appRouter } from './api/router';
 import { ErrorHandler } from './common';
 
 dotenv.config({ quiet: true });
@@ -39,7 +39,7 @@ app.use('/health', (_, response) =>
 
 app.use('/uploads', express.static(uploadPath));
 
-app.use('/api', AppRouter);
+app.use('/api', appRouter);
 app.use(ErrorHandler);
 
 const port = process.env.PORT || 4000;

@@ -1,0 +1,31 @@
+name: Auto Merge to Production Branch
+
+on:
+    workflow_run:
+        workflows: ['Code Quality']
+        types: [completed]
+        branches: [main]
+
+    workflow_dispatch:
+
+jobs:
+    merge:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Configure Git
+              run: |
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+
+            - name: Merge to Production
+              run: |
+                  LAST_COMMIT_MSG=$(git log -1 --pretty=%B origin/main)
+
+                  git fetch origin production
+                  git checkout production
+                  git merge origin/main --no-ff -m "$LAST_COMMIT_MSG"
+                  git push origin production

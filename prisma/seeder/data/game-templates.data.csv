@@ -1,7 +1,7 @@
 id,slug,name,description,logo,is_time_limit_based,is_life_based
 d7d8399a-8a98-44f3-a665-ed03a6b9a5d0,quiz,"Quiz","Create a multiple choice Game",atom,false,false
-8fcc856e-4366-4275-802f-2cda5e010183,anagram,"Anagram","Lorem",book-a,false,false
-0eabc2f1-0119-48f4-84e8-2e9a2375757c,spin-the-wheel,"Spin the Wheel","Lorem",disc-3,false,false
+8fcc856e-4366-4275-802f-2cda5e010183,anagram,"Anagram","Arrange the jumbled letters into the correct word",book-a,false,false
+0eabc2f1-0119-48f4-84e8-2e9a2375757c,spin-the-wheel,"Spin the Wheel","Game edukasi berbasis pilihan ganda dengan mekanisme roda putar",disc-3,false,false
 1c6f82ad-3f6f-4a98-8fb9-e52fcb1cce84,open-the-box,"Open the Box","Lorem",archive-restore,true,false
 80075968-6986-4980-a735-d76a287cf78d,unjumble,"Unjumble","Lorem",combine,false,false
 29d219ad-abc3-4cbc-8f60-d2b1d06efeff,matching-pair,"Matching Pair","Lorem",users,false,false
@@ -14,11 +14,11 @@ d97887a7-63bf-47ab-8531-38d3c44943fb,match-up,"Match Up","Lorem",table,false,fal
 785e62e3-fc58-4cbd-9ffe-c0063c0c1207,word-search,"Word Search","Lorem",text-search,true,true
 a67b668c-e95d-483e-8d4e-385b050f5646,gameshow-quiz,"Gameshow Quiz","Lorem",theater,true,false
 945328c2-a578-4a62-af7d-4ef93ee000e3,maze-chase,"Maze Chase","Lorem",gamepad-directional,false,true
-87338387-b0cc-462e-9489-a0070f98c3a1,crossword,"Crossword","Lorem",panels-right-bottom,false,false
+87338387-b0cc-462e-9489-a0070f98c3a1,crossword,"Crossword","TTS asik cihuy",panels-right-bottom,false,false
 a2678379-5c86-4f05-a10a-f37370732e1d,labelled-diagram,"Labelled Diagram","Lorem",pin,false,false
 ac8b43c2-1bee-4a3f-a9ad-b8aa6f8a8d10,true-or-false,"True or False","Lorem",book-open-check,true,false
 374043f0-8c5c-4c0e-9985-cb8e2ef68936,hangman,"Hangman","Lorem",skull,false,true
-a947e0b8-f3f1-4c20-af14-63ac04c8ed8d,airplane,"Airplane","Lorem",plane,false,true
+a947e0b8-f3f1-4c20-af14-63ac04c8ed8d,airplane,"Airplane","Kendalikan pesawat ke jawaban benar. Hindari jawaban salah.",plane,false,true
 9803ce6b-8d0c-47fe-8306-9411e3399665,whack-a-mole,"Whack-a-Mole","Lorem",gavel,true,false
 9d13d300-fe45-4fa3-88d3-4f944e1a7f01,baloon-pop,"Baloon Pop","Lorem",bow-arrow,true,false
 b7efa7d0-fe73-4a5b-80d8-953cee5a39dc,image-quiz,"Image Quiz","Create a time-based image reveal Game",aperture,true,false
@@ -29,7 +29,7 @@ ec1fdf17-7935-4da9-a346-7bfd887fb56c,rank-order,"Rank Order","Lorem",list-collap
 2614daa4-efec-46b2-a95a-ee5651578465,word-magnet,"Word Magnet","Lorem",magnet,false,false
 6dd614dc-bdcd-4cf9-a8d4-a98f497b39ec,flying-fruit,"Flying Fruit","Lorem",citrus,false,true
 474d18da-c038-4ca6-b6b2-2c88fff6a006,math-generator,"Math Generator","Lorem",sigma,false,false
-b8b126af-011f-49f8-8616-ec8ed9180e33,pair-or-no-pair,"pair or No Pair","Lorem",grid-2x2-x,false,false
+b8b126af-011f-49f8-8616-ec8ed9180e33,pair-or-no-pair,"Pair or No Pair","Test your memory and speed by finding matching pairs!",layers,false,false
 ba2f6e6a-ca73-472f-a227-69a6e861f754,speed-sorting,"Speed Sorting","Lorem",clock-arrow-down,false,false
 2bdeb39e-9041-4997-992b-eeeb82f03894,spell-the-word,"Spell the Word","Lorem",megaphone,false,false
 cc7634f2-ddd9-450e-a0c7-7e80c7cd206d,type-the-answer,"Type the Answer","Lorem",text-cursor-input,false,false

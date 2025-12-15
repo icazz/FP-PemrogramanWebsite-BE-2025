@@ -42,3 +42,7 @@ prisma/seeder/data/users-prod.data.csv
 uploads
 bun.lockb
 bun.lock
+
+# whack-a-mole documentation
+src/api/game/game-list/whack-a-mole/README.md
+

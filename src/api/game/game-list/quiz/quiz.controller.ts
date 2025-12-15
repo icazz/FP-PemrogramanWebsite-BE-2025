@@ -52,7 +52,7 @@ export const QuizController = Router()
 
         return response.status(result.statusCode).json(result.json());
       } catch (error) {
-        next(error);
+        return next(error);
       }
     },
   )
@@ -163,7 +163,7 @@ export const QuizController = Router()
 
         return response.status(result.statusCode).json(result.json());
       } catch (error) {
-        next(error);
+        return next(error);
       }
     },
   )
@@ -190,7 +190,7 @@ export const QuizController = Router()
           .status(successResponse.statusCode)
           .json(successResponse.json());
       } catch (error) {
-        next(error);
+        return next(error);
       }
     },
   )
