@@ -20,7 +20,13 @@ export const ImageQuizQuestionSchema = z.object({
   question_image_array_index: z.coerce.number().min(0).max(20),
   correct_answer_id: z.string().uuid(),
   answers: z.array(ImageQuizAnswerSchema).min(3).max(6),
-});
+}).refine(
+  (data) => data.answers.some(ans => ans.answer_id === data.correct_answer_id),
+  {
+    message: "correct_answer_id must match one of the answer_id values in answers",
+    path: ["correct_answer_id"],
+  }
+);
 
 // 3. Skema Utama (Perhatikan field yang DIHAPUS)
 export const CreateImageQuizSchema = z.object({
