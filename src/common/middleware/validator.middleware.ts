@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import {
   type NextFunction,
   type Request,
@@ -45,12 +43,31 @@ export const validateBody = <T>({
       const filesData =
         file_fields.length > 0
           ? Object.fromEntries(
-              Object.entries(request.files || {}).map(([key, value]) => [
-                key,
-                Array.isArray(value) && value.length > 1
-                  ? value.map(item => multerToFile(item))
-                  : multerToFile(value[0]),
-              ]),
+              Object.entries(request.files || {}).map(([key, value]) => {
+                const fieldConfig = file_fields.find(f => f.name === key);
+                const isArrayField =
+                  fieldConfig &&
+                  fieldConfig.maxCount &&
+                  fieldConfig.maxCount > 1;
+
+                if (isArrayField) {
+                  return [
+                    key,
+                    Array.isArray(value)
+                      ? (value as Express.Multer.File[]).map(item =>
+                          multerToFile(item),
+                        )
+                      : [multerToFile(value as unknown as Express.Multer.File)],
+                  ];
+                }
+
+                return [
+                  key,
+                  Array.isArray(value) && value.length > 0
+                    ? multerToFile((value as Express.Multer.File[])[0])
+                    : value,
+                ];
+              }),
             )
           : {};
 
