@@ -5,4 +5,4 @@
 
 */
 -- DropTable
-DROP TABLE "WhackARoboScore";
+DROP TABLE IF EXISTS "WhackARoboScore";

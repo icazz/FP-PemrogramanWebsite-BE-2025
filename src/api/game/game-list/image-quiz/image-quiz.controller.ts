@@ -229,9 +229,13 @@ export const ImageQuizController = Router()
           try {
             const token = authHeader.split(' ')[1];
             const secret = process.env.JWT_ACCESS_SECRET;
+
             if (!secret) {
-              throw new Error('JWT_ACCESS_SECRET environment variable is not set');
+              throw new Error(
+                'JWT_ACCESS_SECRET environment variable is not set',
+              );
             }
+
             const decoded = verify(token, secret) as { user_id: string };
 
             userId = decoded.user_id;

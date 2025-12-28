@@ -18,6 +18,7 @@ export interface IImageQuizJson {
   questions: IImageQuizQuestion[];
   is_question_randomized: boolean;
   is_answer_randomized: boolean;
+  theme?: 'adventure' | 'family100' | 'ocean';
 }
 
 // konfigurasi yang dikirim ke frontend

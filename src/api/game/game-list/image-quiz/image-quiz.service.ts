@@ -58,9 +58,16 @@ export abstract class ImageQuizService {
       }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+    const payloadSettings = (data as any).settings || {};
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+    const inputTheme = data.theme || payloadSettings.theme || 'family100';
+
     const gameJson: IImageQuizJson = {
       is_question_randomized: data.is_question_randomized,
       is_answer_randomized: data.is_answer_randomized,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      theme: inputTheme,
       questions: data.questions.map(
         (q: CreateQuestionProps) =>
           ({
@@ -182,6 +189,7 @@ export abstract class ImageQuizService {
       question_id: q.question_id,
       question_text: q.question_text,
       question_image_url: q.question_image_url,
+      correct_answer_id: q.correct_answer_id,
       answers: gameJson.is_answer_randomized
         ? this.shuffleArray(q.answers)
         : q.answers,
@@ -196,6 +204,7 @@ export abstract class ImageQuizService {
       name: game.name,
       description: game.description,
       thumbnail_image: game.thumbnail_image,
+      theme: gameJson.theme || 'family100',
       tile_config: config,
       questions: finalQuestions,
     };
@@ -239,7 +248,7 @@ export abstract class ImageQuizService {
 
     await prisma.games.delete({ where: { id: game_id } });
 
-    await Promise.all(oldImagePaths.map((path) => FileManager.remove(path)));
+    await Promise.all(oldImagePaths.map(path => FileManager.remove(path)));
 
     return { id: game_id };
   }
@@ -330,6 +339,11 @@ export abstract class ImageQuizService {
       };
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+    const payloadSettings = (data as any).settings || {};
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+    const newTheme = data.theme || payloadSettings.theme;
+
     const quizJson: IImageQuizJson = {
       is_question_randomized:
         data.is_question_randomized ??
@@ -337,6 +351,8 @@ export abstract class ImageQuizService {
         false,
       is_answer_randomized:
         data.is_answer_randomized ?? oldQuizJson?.is_answer_randomized ?? false,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      theme: newTheme ?? oldQuizJson?.theme ?? 'family100',
       questions: newQuestions as IImageQuizQuestion[],
     };
 
@@ -363,8 +379,8 @@ export abstract class ImageQuizService {
 
     await Promise.all(
       oldImagePaths
-        .filter((oldPath) => !newImagePaths.includes(oldPath))
-        .map((oldPath) => FileManager.remove(oldPath))
+        .filter(oldPath => !newImagePaths.includes(oldPath))
+        .map(oldPath => FileManager.remove(oldPath)),
     );
 
     return updatedGame;

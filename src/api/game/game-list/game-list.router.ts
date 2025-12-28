@@ -1,10 +1,10 @@
 import { Router } from 'express';
 
-import { ImageQuizController } from './image-quiz/image-quiz.controller';
 import airplaneRouter from './airplane/airplane.router';
 import { AnagramController } from './anagram/anagram.controller';
 import { CrosswordController } from './crossword/crossword.controller';
 import { FindTheMatchController } from './find-the-match/find-the-match.controller';
+import { ImageQuizController } from './image-quiz/image-quiz.controller';
 import { MazeChaseController } from './maze-chase/maze-chase.controller';
 import { PairOrNoPairController } from './pair-or-no-pair/pair-or-no-pair.controller';
 import { QuizController } from './quiz/quiz.controller';
@@ -17,8 +17,8 @@ import { WhackAMoleController } from './whack-a-mole/whack-a-mole.controller';
 
 const gameListRouter = Router();
 
-GameListRouter.use('/image-quiz', ImageQuizController);
-GameListRouter.use('/quiz', QuizController);
+gameListRouter.use('/image-quiz', ImageQuizController);
+gameListRouter.use('/quiz', QuizController);
 gameListRouter.use('/quiz', QuizController);
 gameListRouter.use('/maze-chase', MazeChaseController);
 gameListRouter.use('/sliding-puzzle', SlidingPuzzleController);
